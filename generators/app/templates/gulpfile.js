@@ -1,13 +1,14 @@
 var gulp        = require('gulp'),
     sass        = require('gulp-sass'),
     include     = require('gulp-include'),
-    browserSync = require('browser-sync').create(),
     jshint      = require('gulp-jshint'),
     minify      = require('gulp-minify'),
     sassLint    = require('gulp-sass-lint'),
     notify      = require('gulp-notify'),
     cleanCSS    = require('gulp-clean-css'),
-    replace     = require('gulp-replace');
+    replace     = require('gulp-replace'),
+    connect     = require('gulp-connect'),
+    open        = require('gulp-open');
 
 gulp.task('sass', function(){
   return gulp.src('src/scss/style.scss')
@@ -17,7 +18,7 @@ gulp.task('sass', function(){
       files: { ignore: 'src/bower_components/**/*.scss' }
     }))
     .pipe(gulp.dest('src/css/style.css'))
-    .pipe(browserSync.stream());
+    .pipe(connect.reload());
 });
 
 gulp.task('js', function(){
@@ -32,7 +33,7 @@ gulp.task('js', function(){
       }
     }))
     .pipe(gulp.dest('static'))
-    .pipe(browserSync.stream());
+    .pipe(connect.reload());
 });
 
 gulp.task('clean-css', ['sass'], function() {
@@ -64,12 +65,25 @@ gulp.task('replace-js', ['js'], function() {
 
 gulp.task('build', ['replace-css', 'replace-js']);
 
-gulp.task('serve', ['sass', 'js'], function () {
-  browserSync.init();
+gulp.task('serve', ['sass', 'js', 'watch'], function () {
+  connect.server({
+    livereload: true
+  });
+  
+  gulp.src('index.html')
+    .pipe(open());
+});
 
-  gulp.watch('static/scss/**/*.scss', ['sass']);
-  gulp.watch('static/js/**/*.js', ['js']);
-  gulp.watch(['*.html']).on('change', browserSync.reload);
+gulp.task('html', function() {
+  gulp.src('*.html')
+    .pipe(gulp.dest('./'))
+    .pipe(connect.reload());
+});
+
+gulp.task('watch', function () {
+  gulp.watch('src/scss/**/*.scss', ['sass']);
+  gulp.watch('src/js/**/*.js', ['js']);
+  gulp.watch(['*.html'], ['html']);
 });
 
 gulp.task('default', ['serve']);

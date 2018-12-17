@@ -19,8 +19,7 @@ module.exports = class extends Generator {
     }, {
       type   : 'input',
       name   : 'repository',
-      message: 'Your template\'s repository',
-      default: 'https://github.com/timber/starter-theme.git' // Default to current folder name
+      message: 'Your template\'s repository'
     }, {
       type   : 'input',
       name   : 'author',
@@ -43,7 +42,7 @@ module.exports = class extends Generator {
       default: true
     }]);
 
-    this.answers.templatesafe = this.answers.themename.replace(/\s+/g, '-').toLowerCase();
+    this.answers.templatesafe = this.answers.templatename.replace(/\s+/g, '-').toLowerCase();
   }
 
   writing() {
@@ -55,6 +54,10 @@ module.exports = class extends Generator {
   }
 
   install() {
+    this.fs.copyTpl(
+      this.templatePath('index.html'),
+      this.destinationPath('index.html'));
+
     this.fs.copyTpl(
       this.templatePath('package.json'),
       this.destinationPath('package.json'),
@@ -71,7 +74,7 @@ module.exports = class extends Generator {
 
     this.fs.copyTpl(
       this.templatePath('bower.json'),
-      this.destinationPath('src/bower.json'),
+      this.destinationPath('bower.json'),
       {
         name      : this.answers.templatesafe,
         version   : this.answers.version,
