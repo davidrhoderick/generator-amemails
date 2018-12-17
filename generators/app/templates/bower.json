@@ -1,0 +1,19 @@
+{
+  "name": "<%= name %>",
+  "authors": [
+    "<%= author %> <<%= email %>>"
+  ],
+  "description": "",
+  "main": "index.html",
+  "license": "<%= license %>",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+  }
+}
