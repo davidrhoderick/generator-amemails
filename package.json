@@ -10,9 +10,12 @@
 		"yeoman-generator",
 		"email",
 		"bootstrap",
-		"template"
+		"template",
 		"minify",
-		"purify"
+		"purify",
+		"css",
+		"javascript",
+		"html"
 	],
 	"dependencies": {
 		"yeoman-generator": "^1.0.0"
