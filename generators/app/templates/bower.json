@@ -15,6 +15,6 @@
     "tests"
   ],
   "dependencies": {
-    "reset-scss": "^2.0.4"
+    "normalize-scss": "normalize.scss#^7.0.1"
   }
 }

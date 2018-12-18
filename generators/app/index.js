@@ -55,8 +55,15 @@ module.exports = class extends Generator {
 
   install() {
     this.fs.copyTpl(
+      this.templatePath('.gitignore'),
+      this.destinationPath('.gitignore'));
+
+    this.fs.copyTpl(
       this.templatePath('index.html'),
-      this.destinationPath('index.html'));
+      this.destinationPath('index.html'),
+      {
+        name : this.answers.templatename
+      });
 
     this.fs.copyTpl(
       this.templatePath('package.json'),
