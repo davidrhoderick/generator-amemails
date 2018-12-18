@@ -1,13 +1,18 @@
 {
 	"name": "generator-amemails",
-	"version": "0.1.3",
+	"version": "0.1.4",
 	"repository": "https://github.com/davidrhoderick/generator-amemails.git",
 	"description": "Builds an HTML email template with SASS and building into single HTML file.",
 	"files": [
 		"generators"
 	],
 	"keywords": [
-		"yeoman-generator"
+		"yeoman-generator",
+		"email",
+		"bootstrap",
+		"template"
+		"minify",
+		"purify"
 	],
 	"dependencies": {
 		"yeoman-generator": "^1.0.0"
