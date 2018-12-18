@@ -1,6 +1,6 @@
 {
 	"name": "generator-amemails",
-	"version": "0.1.1",
+	"version": "0.1.3",
 	"repository": "https://github.com/davidrhoderick/generator-amemails.git",
 	"description": "Builds an HTML email template with SASS and building into single HTML file.",
 	"files": [

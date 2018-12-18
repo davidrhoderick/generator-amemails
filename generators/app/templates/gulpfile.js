@@ -10,7 +10,8 @@ var gulp        = require('gulp'),
     connect     = require('gulp-connect'),
     open        = require('gulp-open'),
     fs          = require('file-system'),
-    clean       = require('gulp-clean');
+    clean       = require('gulp-clean')
+    purify      = require('gulp-purifycss');
 
 gulp.task('sass', function(){
   return gulp.src('src/scss/style.scss')
@@ -64,6 +65,7 @@ gulp.task('default', ['serve']);
 
 gulp.task('clean-css', ['sass'], function() {
   return gulp.src('./src/css/style.css')
+    .pipe(purify(['./build/*.html', './build/*.js']))
     .pipe(cleanCSS({debug: true}, (details) => {
       console.log(`${details.name}: ${details.stats.originalSize}`);
       console.log(`${details.name}: ${details.stats.minifiedSize}`);
@@ -75,7 +77,7 @@ gulp.task('replace-css', ['clean-css'], function() {
   return gulp.src('build/index.html')
     .pipe(replace(/<link rel="stylesheet" type="text\/css" href="src\/css\/style.css"[^>]*>/, function(s) {
       var style = fs.readFileSync('build/style.css', 'utf8');
-      return '<style>' + style + '</style>';
+      return '<style>\n' + style + '\n</style>';
     }))
     .pipe(gulp.dest('build'));
 });
@@ -84,7 +86,7 @@ gulp.task('replace-js', ['js'], function() {
   return gulp.src('build/index.html')
     .pipe(replace(/<script src="build\/script.min.js"><\/script[^>]*>/, function(s) {
       var script = fs.readFileSync('build/script.min.js', 'utf8');
-      return '<script>' + script + '</script>';
+      return '<script>\n' + script + '\n</script>';
     }))
     .pipe(gulp.dest('build'));
 });
@@ -103,15 +105,19 @@ gulp.task('replace-html-without-js', function() {
 });
 
 gulp.task('clean-prebuild', function() {
-  return gulp.src('build/*', {read: false})
+  return gulp.src('./build/*', {read: false})
     .pipe(clean());
 });
 
 gulp.task('clean-postbuild', function() {
-  return gulp.src(['build/*.js', 'build/*.css'], {read: false})
+  return gulp.src(['./build/*.js', './build/*.css'], {read: false})
     .pipe(clean());
 });
 
-gulp.task('build-css', ['clean-prebuild', 'replace-html-without-js', 'replace-css', 'clean-postbuild']);
+gulp.task('build-css', ['clean-prebuild', 'replace-html-without-js', 'replace-css'], function(s) {
+  gulp.start('clean-postbuild');
+});
 
-gulp.task('build', ['clean-prebuild', 'replace-html', 'replace-css', 'replace-js', 'clean-postbuild']);
+gulp.task('build', ['clean-prebuild', 'replace-html', 'replace-css', 'replace-js'], function(s) {
+  gulp.start('clean-postbuild');
+});
